@@ -81,7 +81,7 @@ enum { reallyQuitSheet };
 	NSInteger currentYear;
 	
 	// CreditCard Info
-	creditCardType type;		// brand
+	CreditCardType type;		// brand
 	NSUInteger numberLength;	// length of formatted number only
 	NSString *creditCardNum;	// real number not the formatted one
 	NSInteger month;			// two digits
@@ -128,7 +128,7 @@ enum { reallyQuitSheet };
 		ccText.frame = r;
 	}
 
-	creditCardImage.tag = InvalidCard;
+	creditCardImage.tag = CreditCardTypeInvalid;
 
 	NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"yyyy"];
@@ -168,7 +168,7 @@ enum { reallyQuitSheet };
 		[textScroller insertSubview:placeView atIndex:0];
 	}	
 
-	type = InvalidCard;
+	type = CreditCardTypeInvalid;
 	
 	ccText.inputAccessoryView = containerView;
 	dummyTextView.inputAccessoryView = containerView;

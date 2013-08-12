@@ -31,48 +31,54 @@
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-typedef enum { Visa=0, MasterCard, AMEX, Discover, DinersClub, InvalidCard } creditCardType;
+typedef NS_ENUM(NSUInteger,CreditCardType)
+{
+    CreditCardTypeVisa,
+    CreditCardTypeMasterCard,
+    CreditCardTypeAMEX,
+    CreditCardTypeDiscover,
+    CreditCardTypeDinersClub,
+    CreditCardTypeInvalid
+};
 
-#define CC_LEN_FOR_TYPE		4	// number of characters to determine length
+#define CardTypeNameVisa @"Visa"
+#define CardTypeNameMasterCard @"MasterCard"
+#define CardTypeNameAmex @"Amex"
+#define CardTypeNameDiscover @"Discover"
+#define CardTypeNameDinersClub @"Diner's Club"
+
+#define CC_MIN_LENGTH_TO_DETERMINE_CCTYPE	4	// number of characters to determine length
 
 #define		kCCid				@"id"				// key for record (NSNumber)
 #define		kCCnumber			@"card_number"		// key for obfuscated number (string)
-#define		kCCtype				@"card_type"		// one of four strings: Master Card, Visa, American Express, Diners Club, and Discover
+#define		kCCtype				@"card_type"		// one of four strings: Master Card, CreditCardTypeVisa, American Express, Diners Club, and CreditCardTypeDiscover
 #define		kCCexpir			@"card_expiration"	// key for expDate in YYYY-MM format (string)
 #define		kCCccv				@"card_cvv"			// key for CCV (NSNumber)
 #define		kCCaddrID			@"address_id"		// key for Address ID (NSNumber)
 #define		kCCdefault			@"default"			// key for is this the default address (NSNumber bool)
-
 
 #import "CreditCard.h"
 
 @interface CreditCard : NSObject
 @property (nonatomic, strong) NSDictionary *dictionary;
 
-+ (creditCardType)ccType:(NSString *)proposedNumber;
++ (CreditCardType)ccTypeWithCardNumber:(NSString *)proposedNumber;
+/*!
+@param number the unformatted card number
+@return a formatted number with all but the last group obscured. Example for Visa: "Visa •••• •••• •••• 1234"
+ */
++ (NSString *)obscuredCardWithNumber:(NSString *)cardNumber;
+/*!
+ 
+ */
 + (BOOL)isValidNumber:(NSString *)proposedNumber;
-+ (BOOL)isLuhnValid:(NSString *)proposedNumber;
-+ (NSString *)formatForViewing:(NSString *)enteredNumber;
-+ (NSString *)promptStringForType:(creditCardType)type justNumber:(BOOL)justNumber;
-
-+ (NSUInteger)lengthOfStringForType:(creditCardType)type;
-+ (NSUInteger)lengthOfFormattedStringForType:(creditCardType)type;
-+ (NSUInteger)lengthOfFormattedStringTilLastGroupForType:(creditCardType)type;
-+ (NSString *)ccvFormat:(creditCardType)type;
-
-+ (UIImage *)creditCardImage:(creditCardType)type;
-+ (UIImage *)creditCardBackImage:(creditCardType)type;
-
-- (NSString *)addrID;
-
-- (creditCardType)ccType;
-- (NSString *)editString;
-- (NSString *)month;
-- (NSString *)year;
-- (NSString *)last4digits;
-
-- (UIView *)viewForItem;
-
-- (void)resizeView:(UIView *)view;
+//+ (BOOL)isLuhnValid:(NSString *)proposedNumber;
++ (NSString *)formattedStringForCardNumber:(NSString *)enteredNumber;
+//+ (NSString *)promptStringForType:(CreditCardType)type justNumber:(BOOL)justNumber;
+//+ (NSString *)lastGroupForCardWithNumber:(NSString *)cardNumber;
++ (NSUInteger)lengthOfStringForType:(CreditCardType)type;
++ (NSUInteger)lengthOfFormattedStringForType:(CreditCardType)type;
++ (NSUInteger)lengthOfFormattedStringTillLastGroupForType:(CreditCardType)type;
++ (NSString *)ccvFormat:(CreditCardType)type;
 
 @end
